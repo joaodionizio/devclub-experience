@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevClub — Landing Institucional
 
-## Getting Started
+Página institucional do DevClub criada para o concurso da vaga de Programador(a) Full Stack.
+**Demo:** _adicione aqui o link da Vercel após o deploy_
 
-First, run the development server:
+## Destaques
+
+- **Hero de partículas tipográficas** (`lib/particle-engine.ts` + `components/ParticleHero.tsx`):
+  ~12.000 grãos renderizados em Canvas 2D formam o símbolo `</>`. Os grãos nascem
+  espalhados pela tela e convergem na montagem; o glifo se reescreve sozinho
+  (`</>` → `DEV` → `CLUB`); **digite no teclado e as partículas escrevem o que você digitou**;
+  o mouse age como vento; o clique explode os grãos e troca a paleta (7 temas).
+- **Editor que compila** (`EclipseEditor.tsx`): código se digita sozinho dentro de um
+  eclipse de luz, terminando em "build concluído — 1 vida transformada".
+- **Jornada horizontal pinada** (`Journey.tsx`): scroll vertical vira travessia
+  horizontal pelos 12 meses do aluno (GSAP ScrollTrigger + pin).
+- Galeria de projetos com **duas versões de layout** (grade/mosaico), como pedido no briefing.
+- Acessibilidade: `prefers-reduced-motion` respeitado em todas as animações.
+
+## Stack e decisões
+
+| Escolha | Por quê |
+| --- | --- |
+| **Next.js 14 (App Router)** | SSG da página inteira (rota `/` 100% estática), estrutura de componentes clara e deploy trivial na Vercel |
+| **TypeScript** | Segurança nos contratos do motor de partículas e dos componentes |
+| **Canvas 2D (sem WebGL/lib)** | 12k grãos de 1–2px a 60fps com `fillRect`; controle total da física em ~200 linhas, zero dependência extra |
+| **GSAP + ScrollTrigger** | Padrão da indústria para animações scroll-driven (pin, scrub) |
+| **Tailwind + CSS custom** | Tailwind para utilitários; o design system (tokens, glows, animações) vive em `globals.css` |
+| **`next/font`** | Fontes self-hosted sem FOUT; o motor lê a família real via CSS variable (`lib/fonts.ts`) |
+
+## Física das partículas (resumo)
+
+- **Mola fraca** (`k ≈ 0.006`) puxando cada grão ao alvo + **atrito 0.94**: o retorno
+  lento é o que cria as nuvens orgânicas ao dispersar.
+- **Vento do mouse**: dentro do raio, o grão recebe a *velocidade* do cursor
+  (não só repulsão radial) — por isso o movimento "arrasta" o símbolo.
+- **Morfo**: qualquer texto é rasterizado num canvas offscreen; `getImageData`
+  amostra os pixels acesos (passo 3px) e os alvos são embaralhados para a
+  transição parecer uma nuvem se reorganizando.
+- **Troca de paleta**: cada grão guarda cor atual e cor-alvo e faz lerp por frame.
+
+## Rodando
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev    # http://localhost:3000
+npm run build  # build de produção (estático)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Estrutura
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/            layout (fontes, metadata) · page (composição) · globals.css (design system)
+components/     uma seção por componente · Chrome.tsx (loader, céu, cursor, reveals)
+lib/            particle-engine.ts (motor) · fonts.ts (família real p/ canvas)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Feito com `</>` e café — João Luís
