@@ -44,12 +44,12 @@ const SCENES = [
 ] as const;
 
 const FORMATIONS = [
-  ["01", "Desenvolvimento completo", "interface + servidor + publicação"],
-  ["02", "Interfaces web", "interfaces que contratam"],
-  ["03", "Servidores e APIs", "APIs, dados e arquitetura"],
-  ["04", "Aplicativos móveis", "iOS + Android"],
-  ["05", "IA & Automação", "agentes, Claude e n8n"],
-  ["06", "Dados", "SQL, análise e Power BI"],
+  ["01", "Full Stack", "front + back + deploy"],
+  ["02", "Front End", "interfaces that get you hired"],
+  ["03", "Back End", "APIs, data and architecture"],
+  ["04", "Mobile", "iOS + Android"],
+  ["05", "AI & Automation", "agents, Claude and n8n"],
+  ["06", "Data", "SQL, analytics and Power BI"],
 ];
 
 const JOURNEY = [
