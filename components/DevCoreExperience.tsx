@@ -181,9 +181,11 @@ function CoreArtifact({ active }: { active: number }) {
 function GlobalNav({
   menuOpen,
   onMenu,
+  onNavigate,
 }: {
   menuOpen: boolean;
   onMenu: () => void;
+  onNavigate: () => void;
 }) {
   return (
     <nav className="dc-nav" aria-label="Navegação principal">
@@ -192,10 +194,10 @@ function GlobalNav({
         <b>DevClub</b>
       </a>
       <div className={`dc-nav-links${menuOpen ? " is-open" : ""}`}>
-        <a href="#quem-somos" onClick={onMenu}>Quem somos</a>
-        <a href="#formacoes" onClick={onMenu}>Formações</a>
-        <a href="#alunos" onClick={onMenu}>Alunos</a>
-        <a href="#tutores" onClick={onMenu}>Tutores</a>
+        <a href="#quem-somos" onClick={onNavigate}>Quem somos</a>
+        <a href="#formacoes" onClick={onNavigate}>Formações</a>
+        <a href="#alunos" onClick={onNavigate}>Alunos</a>
+        <a href="#tutores" onClick={onNavigate}>Tutores</a>
       </div>
       <div className="dc-nav-actions">
         <span className="dc-online"><i />30.412 devs</span>
@@ -364,6 +366,29 @@ export default function DevCoreExperience() {
       engine.resize();
       ScrollTrigger.refresh();
     };
+    const onAnchorClick = (event: MouseEvent) => {
+      const origin = event.target;
+      if (!(origin instanceof Element)) return;
+
+      const anchor = origin.closest<HTMLAnchorElement>('a[href^="#"]');
+      const href = anchor?.getAttribute("href");
+      if (!anchor || !href || href === "#") return;
+
+      const target = document.getElementById(decodeURIComponent(href.slice(1)));
+      if (!target) return;
+
+      event.preventDefault();
+      setMenuOpen(false);
+      history.pushState(null, "", href);
+
+      if (lenis) {
+        lenis.scrollTo(target, { offset: -80, duration: 1.1 });
+        return;
+      }
+
+      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+    };
 
     (document.fonts?.ready ?? Promise.resolve()).then(boot);
     addEventListener("pointermove", onMove);
@@ -371,6 +396,7 @@ export default function DevCoreExperience() {
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", onResize);
     experienceElement?.addEventListener("click", onClick);
+    experienceElement?.addEventListener("click", onAnchorClick);
 
     return () => {
       engine.stop();
@@ -382,6 +408,7 @@ export default function DevCoreExperience() {
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onResize);
       experienceElement?.removeEventListener("click", onClick);
+      experienceElement?.removeEventListener("click", onAnchorClick);
     };
   }, []);
 
@@ -398,7 +425,11 @@ export default function DevCoreExperience() {
       <div className="dc-progress" />
       <div className="dc-grid" aria-hidden="true" />
       <div className="dc-pointer-glow" aria-hidden="true" />
-      <GlobalNav menuOpen={menuOpen} onMenu={() => setMenuOpen((value) => !value)} />
+      <GlobalNav
+        menuOpen={menuOpen}
+        onMenu={() => setMenuOpen((value) => !value)}
+        onNavigate={() => setMenuOpen(false)}
+      />
 
       <div className={`dc-stage dc-stage--${active}`} aria-hidden="true">
         <canvas ref={canvasRef} className="dc-particles" />

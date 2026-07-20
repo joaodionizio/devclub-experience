@@ -22,7 +22,7 @@ export default function ScrambleEyebrows() {
           if (!entry.isIntersecting || done.has(element)) return;
 
           done.add(element);
-          const original = element.dataset.text || element.innerText;
+          const original = (element.dataset.text || element.textContent || "").trim();
           element.dataset.text = original;
           new TextScramble(element).play(original);
         });

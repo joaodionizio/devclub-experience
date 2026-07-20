@@ -17,7 +17,7 @@ export class TextScramble {
   }
 
   play(text: string): Promise<void> {
-    const oldText = this.element.innerText;
+    const oldText = this.element.textContent || "";
     const length = Math.max(oldText.length, text.length);
     const promise = new Promise<void>((resolve) => (this.resolve = resolve));
 
