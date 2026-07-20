@@ -35,12 +35,12 @@ gsap.registerPlugin(ScrollTrigger);
 const SCENES = [
   { id: "inicio", nav: "INITIALIZE", particle: "</>" },
   { id: "quem-somos", nav: "MANIFEST", particle: "DEV" },
-  { id: "formacoes", nav: "BUILD YOUR STACK", particle: "TRILHA" },
+  { id: "formacoes", nav: "BUILD YOUR STACK", particle: "STACK" },
   { id: "jornada", nav: "CAREER PIPELINE", particle: "01→05" },
-  { id: "plataforma", nav: "NEVER CODE ALONE", particle: "AO VIVO" },
-  { id: "alunos", nav: "PROOF OF WORK", particle: "PROJETO" },
-  { id: "mercado", nav: "CONNECTED TO THE MARKET", particle: "VAGA" },
-  { id: "tutores", nav: "JOIN THE CLUB", particle: "CLUBE" },
+  { id: "plataforma", nav: "NEVER CODE ALONE", particle: "LIVE" },
+  { id: "alunos", nav: "PROOF OF WORK", particle: "BUILD" },
+  { id: "mercado", nav: "CONNECTED TO THE MARKET", particle: "MATCH" },
+  { id: "tutores", nav: "JOIN THE CLUB", particle: "CLUB" },
 ] as const;
 
 const FORMATIONS = [
@@ -54,7 +54,7 @@ const FORMATIONS = [
 
 const JOURNEY = [
   ["DIA 001", "Primeira linha"],
-  ["MÊS 003", "Primeira publicação"],
+  ["MÊS 003", "Primeiro deploy"],
   ["MÊS 006", "Portfólio real"],
   ["MÊS 009", "Modo entrevista"],
   ["MÊS 012", "Contratado"],
@@ -63,11 +63,11 @@ const JOURNEY = [
 const COMPANIES = ["iFood", "Nubank", "Itaú", "Mercado Livre", "Globo", "Stone", "PicPay", "XP"];
 
 const TUTORS = [
-  ["RM", "Rodolfo Mori", "fundador · desenvolvimento completo"],
-  ["FE", "Fernanda", "interfaces web"],
-  ["AG", "Agustinho", "servidores · Node.js"],
+  ["RM", "Rodolfo Mori", "fundador · full stack"],
+  ["FE", "Fernanda", "front end · UI"],
+  ["AG", "Agustinho", "back end · Node"],
   ["HE", "Henrique", "IA · automações"],
-  ["MA", "Márcio", "aplicativos móveis"],
+  ["MA", "Márcio", "mobile"],
   ["JU", "Juliana", "dados · Power BI"],
 ];
 
@@ -96,14 +96,14 @@ function CoreArtifact({ active }: { active: number }) {
       </div>
 
       <div className="dc-artifact-panel dc-artifact-manifest">
-        <div className="dc-panel-bar"><i /><i /><i /><span>manifest.ts</span></div>
+        <div className="dc-panel-bar"><i /><i /><i /><span>manifesto.ts</span></div>
         <code>
           <b>const</b> futuro = <em>await</em> voce
           <br />&nbsp;&nbsp;.<span>estudar</span>()
           <br />&nbsp;&nbsp;.<span>construir</span>()
           <br />&nbsp;&nbsp;.<span>evoluir</span>();
         </code>
-        <small>✓ compilação concluída</small>
+        <small>✓ build concluído</small>
       </div>
 
       <div className="dc-artifact-panel dc-artifact-stack">
@@ -127,26 +127,26 @@ function CoreArtifact({ active }: { active: number }) {
         <div className="dc-platform-body">
           <aside><b>DC</b><i /><i /><i /><i /></aside>
           <main>
-            <small>FORMAÇÃO COMPLETA</small>
+            <small>FORMAÇÃO FULL STACK</small>
             <strong>Continue de onde parou.</strong>
             <div className="dc-platform-progress"><i /></div>
             <div className="dc-platform-grid">
               <span><Play size={14} />Fundamentos</span>
               <span><Code2 size={14} />Projeto real</span>
-              <span><Bot size={14} />Club Agents</span>
+              <span><Bot size={14} />Club Agent</span>
             </div>
           </main>
         </div>
-        <div className="dc-float-note dc-float-note--top"><Bot size={13} /> Código revisado · 2 sugestões</div>
+        <div className="dc-float-note dc-float-note--top"><Bot size={13} /> PR revisado · 2 sugestões</div>
         <div className="dc-float-note dc-float-note--bottom"><Check size={13} /> Trilha concluída · 68%</div>
       </div>
 
       <div className="dc-artifact-panel dc-artifact-projects">
         {[
-          ["/cine", "Streaming", "NEXT.JS"],
-          ["/carrinho", "E-commerce", "REACT"],
-          ["/agente", "Agente de IA", "NODE.JS"],
-          ["/banco", "Fintech", "TS"],
+          ["/cine", "Streaming", "NEXT"],
+          ["/cart", "E-commerce", "REACT"],
+          ["/agent", "Agente de IA", "NODE"],
+          ["/bank", "Fintech", "TS"],
         ].map(([path, name, tag], i) => (
           <div key={path} style={{ "--i": i } as React.CSSProperties}>
             <small>{path}</small>
@@ -173,7 +173,7 @@ function CoreArtifact({ active }: { active: number }) {
             <b>{initials}</b><small>{name}</small>
           </span>
         ))}
-        <div><Users /><b>30.412</b><small>programadores conectados</small></div>
+        <div><Users /><b>30.412</b><small>devs conectados</small></div>
       </div>
     </div>
   );
@@ -199,7 +199,7 @@ function GlobalNav({
         <a href="#tutores" onClick={onMenu}>Tutores</a>
       </div>
       <div className="dc-nav-actions">
-        <span className="dc-online"><i />30.412 programadores</span>
+        <span className="dc-online"><i />30.412 devs</span>
         <a className="dc-nav-cta" href="#tutores">Quero ser aluno <ArrowRight size={15} /></a>
         <button className="dc-menu" onClick={onMenu} aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}>
           {menuOpen ? <X /> : <Menu />}
@@ -473,7 +473,7 @@ export default function DevCoreExperience() {
                 </div>
               ))}
             </div>
-            <div className="dc-build-success dc-reveal"><Terminal /> COMPILAÇÃO CONCLUÍDA <span>status: contratado</span></div>
+            <div className="dc-build-success dc-reveal"><Terminal /> BUILD SUCCESSFUL <span>status: contratado</span></div>
           </div>
         </section>
 
@@ -497,8 +497,8 @@ export default function DevCoreExperience() {
             <h2 className="dc-reveal">Seu código<br /><span>vira prova.</span></h2>
             <p className="dc-lead dc-reveal">Você não termina com um certificado na gaveta. Termina com projetos que um recrutador pode abrir, testar e avaliar.</p>
             <blockquote className="dc-testimonial dc-reveal">
-              “Saí do caixa de supermercado para minha primeira vaga em interfaces web em nove meses.”
-              <footer><span>AR</span><p><b>Ana Ribeiro</b><small>interfaces web · contratada em 2025</small></p></footer>
+              “Saí do caixa de supermercado para minha primeira vaga como front-end em nove meses.”
+              <footer><span>AR</span><p><b>Ana Ribeiro</b><small>front-end · contratada em 2025</small></p></footer>
             </blockquote>
             <div className="dc-project-metric dc-reveal"><b>6+</b><span>projetos reais<br />no portfólio</span></div>
           </div>
