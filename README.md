@@ -56,4 +56,4 @@ lib/            particle-engine.ts (física) · fonts.ts (família real p/ canva
 ```
 
 ---
-Feito com `</>` e café — João Luís
+Feito com `</>` e café.

@@ -229,7 +229,7 @@ function PlatformConsole() {
         </aside>
         <main>
           <div className="dc-platform-welcome">
-            <div><span>TRILHA FULL STACK</span><h3>Continue compilando,<br />João.</h3></div>
+            <div><span>TRILHA FULL STACK</span><h3>Continue de onde<br />você parou.</h3></div>
             <div className="dc-ring-progress"><b>68</b><small>%</small></div>
           </div>
           <div className="dc-lesson-row">
@@ -247,7 +247,7 @@ function PlatformConsole() {
         </main>
         <section className="dc-platform-side">
           <span>HOJE / AO VIVO</span>
-          <div><i /><small>20:00</small><b>Review de portfólio</b><em>com Rodolfo Mori</em></div>
+          <div><i /><small>20:00</small><b>Review de portfólio</b><em>sessão ao vivo</em></div>
           <span>SEU SPRINT</span>
           <ul><li><Check />2 aulas concluídas</li><li><Check />1 PR enviado</li><li><i />Deploy pendente</li></ul>
         </section>
