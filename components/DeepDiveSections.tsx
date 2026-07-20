@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
+import { gsap } from "gsap";
 import {
   ArrowDown,
   ArrowRight,
@@ -141,19 +142,16 @@ const FAQ = [
 ];
 
 function DetailHeading({
-  label,
   title,
   outline,
   description,
 }: {
-  label: string;
   title: string;
   outline: string;
   description?: string;
 }) {
   return (
     <header className="dc-detail-heading dc-detail-reveal">
-      <div><i /><b data-scramble>{label}</b></div>
       <h2>{title}<br /><span>{outline}</span></h2>
       {description && <p>{description}</p>}
     </header>
@@ -257,6 +255,77 @@ function PlatformConsole() {
 
 function ProjectLab() {
   const [layout, setLayout] = useState<"grade" | "mosaico">("grade");
+  const gridRef = useRef<HTMLDivElement>(null);
+  const firstLayout = useRef(true);
+
+  useEffect(() => {
+    if (firstLayout.current) {
+      firstLayout.current = false;
+      return;
+    }
+
+    const cards = gridRef.current?.querySelectorAll<HTMLElement>(".dc-project-case");
+    if (!cards?.length || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.fromTo(
+      cards,
+      { opacity: 0, y: 24, scale: 0.97, rotateX: 0, rotateY: 0 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.55,
+        stagger: 0.07,
+        ease: "power3.out",
+        clearProps: "opacity,transform",
+      }
+    );
+  }, [layout]);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const cards = grid.querySelectorAll<HTMLElement>(".dc-project-case");
+    const handlers: Array<[HTMLElement, (event: MouseEvent) => void, () => void]> = [];
+
+    cards.forEach((card) => {
+      const move = (event: MouseEvent) => {
+        const bounds = card.getBoundingClientRect();
+        gsap.to(card, {
+          rotateX: ((event.clientY - bounds.top) / bounds.height - 0.5) * -7,
+          rotateY: ((event.clientX - bounds.left) / bounds.width - 0.5) * 9,
+          transformPerspective: 800,
+          duration: 0.4,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
+      const leave = () => {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
+
+      card.addEventListener("mousemove", move);
+      card.addEventListener("mouseleave", leave);
+      handlers.push([card, move, leave]);
+    });
+
+    return () => {
+      handlers.forEach(([card, move, leave]) => {
+        card.removeEventListener("mousemove", move);
+        card.removeEventListener("mouseleave", leave);
+        gsap.killTweensOf(card);
+      });
+    };
+  }, []);
 
   return (
     <>
@@ -281,7 +350,7 @@ function ProjectLab() {
           </button>
         </div>
       </div>
-      <div className={`dc-project-lab is-${layout}`} data-project-grid={layout}>
+      <div ref={gridRef} className={`dc-project-lab is-${layout}`} data-project-grid={layout} id="projGrid">
         {PROJECTS.map(({ Icon, path, title, stack, code }) => (
           <article className="dc-project-case dc-detail-card" key={code}>
             <header><span>{path}</span><b>{code}</b></header>
@@ -337,7 +406,6 @@ export default function DeepDiveSections() {
   return (
     <div className="dc-deep-dive">
       <header className="dc-deep-intro">
-        <span className="dc-deep-index" data-scramble>EXPLORE MAIS</span>
         <h2>A experiência termina.<br /><span>O sistema se abre.</span></h2>
         <p>Agora entre em cada camada que transforma estudo em código, código em portfólio e portfólio em oportunidade.</p>
         <div><i /><span>CONTINUE EXPLORANDO</span><ArrowDown /></div>
@@ -346,7 +414,7 @@ export default function DeepDiveSections() {
       <BrandRail />
 
       <section className="dc-detail-section dc-system-section" id="metodo">
-        <DetailHeading label="O sistema" title="Não é curso." outline="É um sistema." description="Conteúdo sozinho não transforma carreira. O que transforma é um ciclo que leva você da teoria ao mercado." />
+        <DetailHeading title="Não é curso." outline="É um sistema." description="Conteúdo sozinho não transforma carreira. O que transforma é um ciclo que leva você da teoria ao mercado." />
         <div className="dc-system-grid">
           <div className="dc-system-code dc-detail-reveal">
             <div className="dc-console-bar"><i /><i /><i /><span>carreira.compilador.ts</span><b>EXECUTANDO</b></div>
@@ -370,12 +438,12 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section" id="formacoes-completas">
-        <DetailHeading label="Seletor de trilha" title="Uma base." outline="Seis direções." description="Não escolha pela moda. Explore cada caminho, veja o resultado e encontre a formação que combina com o futuro que você quer construir." />
+        <DetailHeading title="Uma base." outline="Seis direções." description="Não escolha pela moda. Explore cada caminho, veja o resultado e encontre a formação que combina com o futuro que você quer construir." />
         <FormationSelector />
       </section>
 
       <section className="dc-detail-section dc-ecosystem-section" id="ecossistema">
-        <DetailHeading label="Rede de apoio" title="O código é seu." outline="A evolução é coletiva." description="Ao redor de cada aluno existe uma rede desenhada para remover bloqueios técnicos, profissionais e humanos." />
+        <DetailHeading title="O código é seu." outline="A evolução é coletiva." description="Ao redor de cada aluno existe uma rede desenhada para remover bloqueios técnicos, profissionais e humanos." />
         <div className="dc-ecosystem-grid">
           {ECOSYSTEM.map(({ Icon, tag, title, text, featured }) => (
             <article className={`dc-ecosystem-card dc-detail-card${featured ? " is-featured" : ""}`} key={title}>
@@ -387,17 +455,17 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section dc-platform-detail" id="plataforma-completa">
-        <DetailHeading label="Central de controle" title="Tudo conectado." outline="Nada perdido." description="Uma plataforma que entende onde você está, o que vem agora e de quem você precisa para continuar." />
+        <DetailHeading title="Tudo conectado." outline="Nada perdido." description="Uma plataforma que entende onde você está, o que vem agora e de quem você precisa para continuar." />
         <PlatformConsole />
       </section>
 
       <section className="dc-detail-section" id="projetos-completos">
-        <DetailHeading label="Prova de trabalho" title="Menos certificado." outline="Mais evidência." description="Seis produtos que mostram como você pensa, constrói, resolve e entrega." />
+        <DetailHeading title="Menos certificado." outline="Mais evidência." description="Seis produtos que mostram como você pensa, constrói, resolve e entrega." />
         <ProjectLab />
       </section>
 
       <section className="dc-detail-section dc-results-section" id="resultados">
-        <DetailHeading label="Resultado humano" title="Não são números." outline="São novas versões." />
+        <DetailHeading title="Não são números." outline="São novas versões." />
         <div className="dc-results-grid">
           <blockquote className="dc-feature-story dc-detail-reveal">
             <span>HISTÓRIA / 001</span>
@@ -413,7 +481,7 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section" id="tutores-completos">
-        <DetailHeading label="Camada humana" title="Tecnologia acelera." outline="Pessoas direcionam." description="Aprenda com profissionais que constroem, revisam e contratam no mercado real." />
+        <DetailHeading title="Tecnologia acelera." outline="Pessoas direcionam." description="Aprenda com profissionais que constroem, revisam e contratam no mercado real." />
         <div className="dc-tutor-system">
           {TUTORS.map(([initials, name, role, signal]) => (
             <article className="dc-tutor-node dc-detail-card" key={initials}>
@@ -425,7 +493,7 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section dc-market-section" id="mercado-completo">
-        <DetailHeading label="Telemetria de carreira" title="Aprender é entrada." outline="Carreira é resultado." description="O objetivo final não é acumular horas de vídeo. É aumentar sua capacidade de criar valor — e ser reconhecido por isso." />
+        <DetailHeading title="Aprender é entrada." outline="Carreira é resultado." description="O objetivo final não é acumular horas de vídeo. É aumentar sua capacidade de criar valor — e ser reconhecido por isso." />
         <div className="dc-market-console">
           <div className="dc-market-numbers dc-detail-reveal">
             <span><small>ALUNOS</small><b><i data-count="30412">0</i></b><em>↑ comunidade ativa</em></span>
@@ -433,7 +501,7 @@ export default function DeepDiveSections() {
             <span><small>RECOMENDAÇÃO</small><b><i data-count="97">0</i>%</b><em>↑ confiança</em></span>
           </div>
           <div className="dc-salary-chart dc-detail-reveal">
-            <header><span>REMUNERAÇÃO ANUAL / BRASIL × REMOTO</span><b>DADOS AO VIVO</b></header>
+            <header><span>REMUNERAÇÃO ANUAL / BRASIL × REMOTO</span></header>
             {[
               ["JÚNIOR", "34%", "52%", "R$ 70,8K", "R$ 135K"],
               ["PLENO", "55%", "72%", "R$ 140K", "R$ 201K"],
@@ -447,13 +515,12 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section dc-faq-section" id="faq">
-        <DetailHeading label="Perguntas abertas" title="Sem mistério." outline="Sem letra miúda." />
+        <DetailHeading title="Sem mistério." outline="Sem letra miúda." />
         <FAQSection />
       </section>
 
       <section className="dc-new-final" id="cta">
         <div className="dc-final-orbit" aria-hidden="true"><i /><i /><i /></div>
-        <span data-scramble>PRONTO PARA COMPILAR</span>
         <h2>Sua próxima versão<br /><b>começa agora.</b></h2>
         <p>Entre para o DevClub e transforme estudo em código, código em portfólio e portfólio em oportunidade.</p>
         <a href="#formacoes-completas">Escolher minha formação <ArrowRight /></a>

@@ -492,11 +492,6 @@ footer{border-top:1px solid var(--line);background:var(--bg-2);overflow:hidden;p
 }
 
 /* =========================================================
-   SCRAMBLE — caracteres de decodificação (ver text-scramble.ts)
-========================================================= */
-.scramble-char{color:var(--cyan);opacity:.75}
-
-/* =========================================================
    PLAYGROUND — mini console de expressões (ver Playground.tsx)
 ========================================================= */
 .pg-body{padding:20px 22px 22px;font-family:var(--mono);font-size:13.5px}
