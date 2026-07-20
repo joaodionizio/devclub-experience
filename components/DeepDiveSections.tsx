@@ -229,7 +229,7 @@ function PlatformConsole() {
         </aside>
         <main>
           <div className="dc-platform-welcome">
-            <div><span>TRILHA FULL STACK</span><h3>Continue de onde<br />você parou.</h3></div>
+            <div><span>TRILHA FULL STACK</span><h3>Continue compilando.</h3></div>
             <div className="dc-ring-progress"><b>68</b><small>%</small></div>
           </div>
           <div className="dc-lesson-row">
