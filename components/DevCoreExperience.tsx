@@ -193,7 +193,7 @@ function GlobalNav({
         <span>&lt;/&gt;</span>
         <b>DevClub</b>
       </a>
-      <div className={`dc-nav-links${menuOpen ? " is-open" : ""}`}>
+      <div id="navegacao-principal" className={`dc-nav-links${menuOpen ? " is-open" : ""}`}>
         <a href="#quem-somos" onClick={onNavigate}>Quem somos</a>
         <a href="#formacoes" onClick={onNavigate}>Formações</a>
         <a href="#alunos" onClick={onNavigate}>Alunos</a>
@@ -202,7 +202,14 @@ function GlobalNav({
       <div className="dc-nav-actions">
         <span className="dc-online"><i />30.412 devs</span>
         <a className="dc-nav-cta" href="#tutores">Quero ser aluno <ArrowRight size={15} /></a>
-        <button className="dc-menu" onClick={onMenu} aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}>
+        <button
+          type="button"
+          className="dc-menu"
+          onClick={onMenu}
+          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={menuOpen}
+          aria-controls="navegacao-principal"
+        >
           {menuOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -231,12 +238,42 @@ export default function DevCoreExperience() {
     let lastScroll = window.scrollY;
     let lenis: Lenis | null = null;
     let lenisRaf = 0;
+    let initialHashRaf = 0;
+    let gatherTween: gsap.core.Tween | null = null;
+    let cancelled = false;
+
+    const scrollToTarget = (target: HTMLElement) => {
+      if (lenis) {
+        lenis.scrollTo(target, { offset: -80, duration: 1.1 });
+        return;
+      }
+
+      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+    };
+
+    const targetFromHash = (hash: string) => {
+      if (!hash || hash === "#") return;
+      let id: string;
+      try {
+        id = decodeURIComponent(hash.slice(1));
+      } catch {
+        return;
+      }
+      return document.getElementById(id);
+    };
+
+    const scrollToHash = (hash: string) => {
+      const target = targetFromHash(hash);
+      if (target) scrollToTarget(target);
+    };
 
     const boot = () => {
+      if (cancelled) return;
       engine.resize();
       engine.start();
       if (!reduced) {
-        gsap.to(engine, { gather: 0.006, duration: 2.8, ease: "power2.in", delay: 0.25 });
+        gatherTween = gsap.to(engine, { gather: 0.006, duration: 2.8, ease: "power2.in", delay: 0.25 });
         lenis = new Lenis({
           duration: 1.1,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -250,6 +287,7 @@ export default function DevCoreExperience() {
         lenisRaf = requestAnimationFrame(raf);
       }
       setLoaded(true);
+      if (location.hash) initialHashRaf = requestAnimationFrame(() => scrollToHash(location.hash));
     };
 
     const changeScene = (index: number) => {
@@ -374,39 +412,38 @@ export default function DevCoreExperience() {
       const href = anchor?.getAttribute("href");
       if (!anchor || !href || href === "#") return;
 
-      const target = document.getElementById(decodeURIComponent(href.slice(1)));
+      const target = targetFromHash(href);
       if (!target) return;
 
       event.preventDefault();
       setMenuOpen(false);
-      history.pushState(null, "", href);
-
-      if (lenis) {
-        lenis.scrollTo(target, { offset: -80, duration: 1.1 });
-        return;
-      }
-
-      const top = target.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+      if (location.hash !== href) history.pushState(null, "", href);
+      scrollToTarget(target);
     };
+    const onPopState = () => scrollToHash(location.hash);
 
     (document.fonts?.ready ?? Promise.resolve()).then(boot);
     addEventListener("pointermove", onMove);
     addEventListener("pointerleave", onLeave);
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", onResize);
+    addEventListener("popstate", onPopState);
     experienceElement?.addEventListener("click", onClick);
     experienceElement?.addEventListener("click", onAnchorClick);
 
     return () => {
+      cancelled = true;
       engine.stop();
+      gatherTween?.kill();
       lenis?.destroy();
       cancelAnimationFrame(lenisRaf);
+      cancelAnimationFrame(initialHashRaf);
       ctx.revert();
       removeEventListener("pointermove", onMove);
       removeEventListener("pointerleave", onLeave);
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onResize);
+      removeEventListener("popstate", onPopState);
       experienceElement?.removeEventListener("click", onClick);
       experienceElement?.removeEventListener("click", onAnchorClick);
     };

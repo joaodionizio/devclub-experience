@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowDown,
   ArrowRight,
@@ -187,6 +188,7 @@ function FormationSelector() {
       <div className="dc-formation-list dc-detail-reveal" role="tablist" aria-label="Formações">
         {FORMATIONS.map((item, index) => (
           <button
+            type="button"
             key={item.index}
             className={active === index ? "is-active" : ""}
             onClick={() => setActive(index)}
@@ -268,8 +270,13 @@ function ProjectLab() {
     }
 
     const cards = gridRef.current?.querySelectorAll<HTMLElement>(".dc-project-case");
-    if (!cards?.length || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!cards?.length) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      ScrollTrigger.refresh();
+      return;
+    }
 
+    gsap.killTweensOf(cards);
     gsap.fromTo(
       cards,
       { opacity: 0, y: 24, scale: 0.97, rotateX: 0, rotateY: 0 },
@@ -282,7 +289,9 @@ function ProjectLab() {
         duration: 0.55,
         stagger: 0.07,
         ease: "power3.out",
-        clearProps: "opacity,transform",
+        clearProps: "transform",
+        overwrite: "auto",
+        onComplete: () => ScrollTrigger.refresh(),
       }
     );
   }, [layout]);
@@ -336,17 +345,21 @@ function ProjectLab() {
         <span>VISUALIZAÇÃO DO PORTFÓLIO</span>
         <div role="group" aria-label="Alterar visualização dos projetos">
           <button
+            type="button"
             className={layout === "grade" ? "is-active" : ""}
             onClick={() => setLayout("grade")}
             aria-pressed={layout === "grade"}
+            aria-controls="projGrid"
             data-project-layout="grade"
           >
             <LayoutGrid /> Grade
           </button>
           <button
+            type="button"
             className={layout === "mosaico" ? "is-active" : ""}
             onClick={() => setLayout("mosaico")}
             aria-pressed={layout === "mosaico"}
+            aria-controls="projGrid"
             data-project-layout="mosaico"
           >
             <PanelsTopLeft /> Mosaico
@@ -395,10 +408,15 @@ function FAQSection() {
     <div className="dc-new-faq dc-detail-reveal">
       {FAQ.map(([question, answer], index) => (
         <article className={open === index ? "is-open" : ""} key={question}>
-          <button onClick={() => setOpen(open === index ? -1 : index)}>
+          <button
+            type="button"
+            onClick={() => setOpen(open === index ? -1 : index)}
+            aria-expanded={open === index}
+            aria-controls={`faq-answer-${index}`}
+          >
             <span>{String(index + 1).padStart(2, "0")}</span><b>{question}</b><ChevronDown />
           </button>
-          <div><p>{answer}</p></div>
+          <div id={`faq-answer-${index}`}><p>{answer}</p></div>
         </article>
       ))}
     </div>
