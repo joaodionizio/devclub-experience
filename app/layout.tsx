@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import "./devcore.css";
+import "./devcore-deep.css";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -15,17 +17,15 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevClub — do zero ao contratado",
+  title: "DevClub — seu futuro, compilado",
   description:
-    "A maior comunidade de programação do Brasil. Formações completas, mentorias, IA e vagas exclusivas.",
+    "Do zero ao contratado com formação, projetos, mentoria, IA e a maior comunidade de programação do Brasil.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${interTight.variable} ${inter.variable} ${jetbrains.variable} locked`}
-      >
+      <body className={`${interTight.variable} ${inter.variable} ${jetbrains.variable}`}>
         {children}
       </body>
     </html>

@@ -25,14 +25,41 @@ export interface EngineOptions {
   reduced: boolean;
 }
 
+/**
+ * Paletas do clique (explosão troca de tema).
+ *
+ * Regra de harmonia: todo tom é claro e saturado o bastante para brilhar em
+ * `lighter` sobre o fundo #05070b, e cada paleta carrega ao menos um tom
+ * azul/ciano/branco puxando para a cor de marca — é isso que impede o site
+ * de "virar outro site" a cada clique. A primeira é a de marca e abre a página.
+ */
 const THEMES: RGB[][] = [
+  // marca — azul → ciano
   [[143, 184, 255], [95, 141, 255], [207, 227, 255], [255, 255, 255], [59, 109, 240]],
+  // azul + rosa suave
   [[122, 162, 255], [255, 255, 255], [240, 166, 200], [74, 125, 255], [201, 217, 255]],
+  // esmeralda
   [[95, 227, 161], [183, 247, 208], [47, 191, 113], [232, 255, 242], [142, 240, 182]],
+  // lima → esmeralda
   [[255, 226, 138], [217, 249, 157], [95, 227, 161], [255, 247, 214], [163, 230, 53]],
+  // coral + azul
   [[255, 122, 110], [122, 162, 255], [255, 255, 255], [255, 209, 102], [95, 227, 161]],
+  // teal → ciano
   [[45, 212, 191], [153, 246, 228], [14, 165, 233], [224, 255, 250], [103, 232, 249]],
+  // âmbar
   [[251, 146, 60], [253, 230, 138], [248, 113, 113], [255, 241, 224], [251, 191, 36]],
+  // violeta (eclipse Reflect) — roxo puxando pro azul de marca
+  [[167, 139, 250], [196, 181, 253], [129, 140, 248], [237, 233, 254], [139, 92, 246]],
+  // magenta elétrico + ciano
+  [[232, 121, 249], [249, 168, 212], [103, 232, 249], [253, 232, 255], [192, 132, 252]],
+  // índigo profundo → periwinkle
+  [[129, 140, 248], [165, 180, 252], [99, 102, 241], [224, 231, 255], [79, 130, 246]],
+  // gelo — quase monocromático, o "respiro" da sequência
+  [[226, 232, 240], [148, 197, 255], [255, 255, 255], [186, 230, 253], [125, 211, 252]],
+  // rosa → âmbar (pôr do sol), ancorado por um azul
+  [[251, 113, 133], [253, 186, 116], [254, 205, 211], [122, 162, 255], [252, 165, 165]],
+  // jade → ciano elétrico
+  [[52, 211, 153], [103, 232, 249], [167, 243, 208], [255, 255, 255], [34, 197, 194]],
 ];
 
 interface Particle {
@@ -175,9 +202,25 @@ export class ParticleEngine {
     }
   }
 
-  setPointer(clientX: number, clientY: number) {
+  /**
+   * client → espaço interno do canvas.
+   *
+   * O canvas leva `transform: translateX() scale()` por cena (devcore.css), e
+   * getBoundingClientRect() devolve a caixa JÁ transformada — enquanto os grãos
+   * vivem na grade não-transformada W×H. Sem dividir pela escala do rect, o
+   * ponteiro fica deslocado do que se vê (era o bug do "mexo aqui, reage ali").
+   * Fazer isso pelo rect cobre translate, scale e qualquer descasamento entre
+   * o tamanho CSS e a resolução do canvas de uma vez só.
+   */
+  private toCanvas(clientX: number, clientY: number): [number, number] {
     const r = this.cv.getBoundingClientRect();
-    const nx = clientX - r.left, ny = clientY - r.top;
+    const sx = r.width ? this.W / r.width : 1;
+    const sy = r.height ? this.H / r.height : 1;
+    return [(clientX - r.left) * sx, (clientY - r.top) * sy];
+  }
+
+  setPointer(clientX: number, clientY: number) {
+    const [nx, ny] = this.toCanvas(clientX, clientY);
     if (this.mouse.px > -9e8) {
       this.mouse.vx = (nx - this.mouse.px) * 0.6;
       this.mouse.vy = (ny - this.mouse.py) * 0.6;
@@ -189,8 +232,7 @@ export class ParticleEngine {
     this.mouse.x = -9e9; this.mouse.y = -9e9; this.mouse.px = -9e9;
   }
   toLocal(clientX: number, clientY: number): [number, number] {
-    const r = this.cv.getBoundingClientRect();
-    return [clientX - r.left, clientY - r.top];
+    return this.toCanvas(clientX, clientY);
   }
 
   start() {
