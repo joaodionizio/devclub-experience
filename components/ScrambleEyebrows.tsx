@@ -3,17 +3,15 @@ import { useEffect } from "react";
 import { TextScramble } from "@/lib/text-scramble";
 
 /**
- * ScrambleEyebrows — decodifica os rótulos ".eyebrow" (ex: "Formações",
- * "Mercado") quando entram na tela, em vez de simplesmente aparecer.
- * Escolhido para os eyebrows (não os títulos grandes) porque eles são
- * texto puro, sem markup aninhado — o gradient dos títulos quebraria
- * se reescrevêssemos o innerHTML durante a animação.
+ * Decodifica uma vez cada rótulo marcado com data-scramble quando ele
+ * entra na viewport. Títulos grandes não recebem o efeito porque possuem
+ * markup interno e seriam destruídos ao reescrever o HTML.
  */
 export default function ScrambleEyebrows() {
   useEffect(() => {
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
-    const targets = document.querySelectorAll<HTMLElement>(".eyebrow");
+    const targets = document.querySelectorAll<HTMLElement>("[data-scramble]");
     const done = new WeakSet<HTMLElement>();
     const io = new IntersectionObserver(
       (entries) => {

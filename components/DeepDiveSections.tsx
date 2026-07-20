@@ -13,8 +13,10 @@ import {
   GraduationCap,
   Headphones,
   Layers3,
+  LayoutGrid,
   LineChart,
   MessageSquareCode,
+  PanelsTopLeft,
   Play,
   ShoppingCart,
   Smartphone,
@@ -35,8 +37,8 @@ type Formation = {
 const FORMATIONS: Formation[] = [
   {
     index: "01",
-    title: "Full Stack",
-    description: "A formação completa para construir produtos do front ao deploy.",
+    title: "Desenvolvimento completo",
+    description: "A formação completa para construir produtos da interface à publicação.",
     duration: "12 meses",
     outcome: "6 projetos publicados",
     modules: ["Lógica e web", "React & Next", "Node & APIs", "Banco de dados"],
@@ -44,7 +46,7 @@ const FORMATIONS: Formation[] = [
   },
   {
     index: "02",
-    title: "Front End",
+    title: "Interfaces web",
     description: "Interfaces rápidas, acessíveis e com acabamento de produto real.",
     duration: "8 meses",
     outcome: "4 interfaces completas",
@@ -53,19 +55,19 @@ const FORMATIONS: Formation[] = [
   },
   {
     index: "03",
-    title: "Back End",
+    title: "Servidores e APIs",
     description: "APIs, autenticação, bancos de dados e arquitetura preparada para crescer.",
     duration: "8 meses",
     outcome: "4 APIs em produção",
-    modules: ["Node.js", "REST & auth", "SQL", "Arquitetura"],
+    modules: ["Node.js", "REST e autenticação", "SQL", "Arquitetura"],
     stack: ["Node.js", "Express", "PostgreSQL", "Docker"],
   },
   {
     index: "04",
-    title: "Mobile",
+    title: "Aplicativos móveis",
     description: "Aplicativos para iOS e Android conectados a serviços reais.",
     duration: "7 meses",
-    outcome: "3 apps completos",
+    outcome: "3 aplicativos completos",
     modules: ["React Native", "Navegação", "APIs", "Publicação"],
     stack: ["React Native", "Expo", "TypeScript", "Firebase"],
   },
@@ -75,7 +77,7 @@ const FORMATIONS: Formation[] = [
     description: "Agentes, fluxos inteligentes e automações que resolvem trabalho de verdade.",
     duration: "6 meses",
     outcome: "8 automações reais",
-    modules: ["Prompt design", "Agentes", "n8n", "Claude Code"],
+    modules: ["Criação de instruções", "Agentes", "n8n", "Claude Code"],
     stack: ["OpenAI", "Claude", "n8n", "APIs"],
   },
   {
@@ -83,8 +85,8 @@ const FORMATIONS: Formation[] = [
     title: "Dados",
     description: "Transforme dados brutos em decisões usando análise e visualização.",
     duration: "6 meses",
-    outcome: "5 dashboards",
-    modules: ["SQL", "Modelagem", "Power BI", "Storytelling"],
+    outcome: "5 painéis",
+    modules: ["SQL", "Modelagem", "Power BI", "Narrativa de dados"],
     stack: ["SQL", "Power BI", "Excel", "Python"],
   },
 ];
@@ -92,60 +94,58 @@ const FORMATIONS: Formation[] = [
 const SYSTEM_STEPS = [
   ["01", "Aprenda", "Aulas objetivas e trilhas que mostram exatamente o próximo passo."],
   ["02", "Construa", "Cada conceito vira código funcionando, não anotação esquecida."],
-  ["03", "Receba review", "Tutores, comunidade e IA encontram o que você ainda não enxerga."],
-  ["04", "Publique", "Deploy, domínio e documentação: seu trabalho precisa existir no mundo."],
+  ["03", "Receba revisão", "Tutores, comunidade e IA encontram o que você ainda não enxerga."],
+  ["04", "Publique", "Publicação, domínio e documentação: seu trabalho precisa existir no mundo."],
   ["05", "Seja visto", "Portfólio, LinkedIn, entrevistas e conexão direta com oportunidades."],
 ];
 
 const ECOSYSTEM = [
-  { Icon: MessageSquareCode, tag: "LIVE", title: "Mentorias semanais", text: "Código, arquitetura e carreira revisados na tela, ao vivo.", featured: true },
-  { Icon: Bot, tag: "24/7", title: "Club Agents", text: "Agentes de IA treinados para revisar PRs e destravar dúvidas." },
-  { Icon: Users, tag: "30K+", title: "Comunidade", text: "Network com quem está começando, evoluindo e contratando." },
-  { Icon: CircleUserRound, tag: "CAREER", title: "Recrutadora", text: "Currículo, LinkedIn e entrevista com feedback profissional." },
-  { Icon: Headphones, tag: "7 DAYS", title: "Suporte humano", text: "Gente de verdade respondendo, inclusive aos fins de semana." },
+  { Icon: MessageSquareCode, tag: "AO VIVO", title: "Mentorias semanais", text: "Código, arquitetura e carreira revisados na tela, ao vivo.", featured: true },
+  { Icon: Bot, tag: "24/7", title: "Club Agents", text: "Agentes de IA treinados para revisar código e destravar dúvidas." },
+  { Icon: Users, tag: "30K+", title: "Comunidade", text: "Rede com quem está começando, evoluindo e contratando." },
+  { Icon: CircleUserRound, tag: "CARREIRA", title: "Recrutadora", text: "Currículo, LinkedIn e entrevista com retorno profissional." },
+  { Icon: Headphones, tag: "7 DIAS", title: "Suporte humano", text: "Gente de verdade respondendo, inclusive aos fins de semana." },
   { Icon: GraduationCap, tag: "MEC", title: "Formação reconhecida", text: "Certificados e caminhos acadêmicos para sua carreira." },
 ];
 
 const PROJECTS: Array<{ Icon: LucideIcon; path: string; title: string; stack: string; code: string }> = [
-  { Icon: Film, path: "/stream", title: "Streaming inteligente", stack: "NEXT · API · AUTH", code: "01" },
-  { Icon: ShoppingCart, path: "/commerce", title: "E-commerce completo", stack: "REACT · STRIPE", code: "02" },
-  { Icon: Users, path: "/social", title: "Rede em tempo real", stack: "SOCKET · NODE", code: "03" },
-  { Icon: LineChart, path: "/fintech", title: "Dashboard financeiro", stack: "TS · CHARTS", code: "04" },
-  { Icon: Bot, path: "/agent", title: "Agente com memória", stack: "AI · VECTOR DB", code: "05" },
-  { Icon: Smartphone, path: "/delivery", title: "Delivery mobile", stack: "NATIVE · MAPS", code: "06" },
+  { Icon: Film, path: "/streaming", title: "Streaming inteligente", stack: "NEXT.JS · API · AUTENTICAÇÃO", code: "01" },
+  { Icon: ShoppingCart, path: "/e-commerce", title: "E-commerce completo", stack: "REACT · STRIPE", code: "02" },
+  { Icon: Users, path: "/rede", title: "Rede em tempo real", stack: "TEMPO REAL · NODE.JS", code: "03" },
+  { Icon: LineChart, path: "/fintech", title: "Fintech com indicadores", stack: "TYPESCRIPT · GRÁFICOS", code: "04" },
+  { Icon: Bot, path: "/agente", title: "Agente com memória", stack: "IA · BANCO VETORIAL", code: "05" },
+  { Icon: Smartphone, path: "/entregas", title: "Aplicativo de entregas", stack: "REACT NATIVE · MAPAS", code: "06" },
 ];
 
 const TUTORS = [
-  ["RM", "Rodolfo Mori", "Fundador · Full Stack", "SYSTEM"],
-  ["FE", "Fernanda", "Front End · UI", "INTERFACE"],
-  ["AG", "Agustinho", "Back End · Node", "ENGINE"],
-  ["HE", "Henrique", "IA · Automações", "INTELLIGENCE"],
-  ["MA", "Márcio", "Mobile", "MOBILITY"],
-  ["JU", "Juliana", "Dados · Power BI", "SIGNAL"],
+  ["RM", "Rodolfo Mori", "Fundador · Desenvolvimento completo", "SISTEMA"],
+  ["FE", "Fernanda", "Interfaces web", "INTERFACE"],
+  ["AG", "Agustinho", "Servidores · Node.js", "MOTOR"],
+  ["HE", "Henrique", "IA · Automações", "INTELIGÊNCIA"],
+  ["MA", "Márcio", "Aplicativos móveis", "MOBILIDADE"],
+  ["JU", "Juliana", "Dados · Power BI", "SINAL"],
 ];
 
 const TESTIMONIALS = [
-  ["“Em nove meses eu saí do caixa de supermercado para minha primeira vaga front-end.”", "Ana Ribeiro", "front-end @ startup"],
-  ["“O review dos projetos fez meu portfólio finalmente parecer trabalho profissional.”", "João Pedro", "back-end · Node"],
-  ["“A simulação de entrevista tirou o medo que me travava havia meses.”", "Renata Souza", "dev júnior"],
+  ["“Em nove meses eu saí do caixa de supermercado para minha primeira vaga em interfaces web.”", "Ana Ribeiro", "interfaces web em empresa de tecnologia"],
+  ["“A revisão dos projetos fez meu portfólio finalmente parecer trabalho profissional.”", "João Pedro", "servidores · Node.js"],
+  ["“A simulação de entrevista tirou o medo que me travava havia meses.”", "Renata Souza", "programadora júnior"],
 ];
 
 const FAQ = [
   ["Preciso saber programar?", "Não. A trilha inicial começa no absoluto zero e constrói a base antes de avançar para projetos."],
   ["Quanto tempo preciso estudar?", "A recomendação é manter uma rotina de 1 a 2 horas por dia. A plataforma registra seu progresso e mostra o próximo passo."],
   ["Vou ter ajuda quando travar?", "Sim. Você combina suporte humano, comunidade, mentorias semanais e agentes de IA disponíveis 24 horas."],
-  ["Os projetos são realmente publicados?", "Sim. Você aprende deploy, documentação e apresentação. O objetivo é terminar com links que um recrutador possa testar."],
+  ["Os projetos são realmente publicados?", "Sim. Você aprende publicação, documentação e apresentação. O objetivo é terminar com links que um recrutador possa testar."],
   ["Existe preparação para conseguir emprego?", "Sim. Currículo, LinkedIn, portfólio, inglês técnico, simulações de entrevista e acesso a oportunidades fazem parte do sistema."],
 ];
 
 function DetailHeading({
-  index,
   label,
   title,
   outline,
   description,
 }: {
-  index: string;
   label: string;
   title: string;
   outline: string;
@@ -153,7 +153,7 @@ function DetailHeading({
 }) {
   return (
     <header className="dc-detail-heading dc-detail-reveal">
-      <div><span>{index}</span><i /><b>{label}</b></div>
+      <div><i /><b data-scramble>{label}</b></div>
       <h2>{title}<br /><span>{outline}</span></h2>
       {description && <p>{description}</p>}
     </header>
@@ -197,14 +197,14 @@ function FormationSelector() {
         ))}
       </div>
       <article className="dc-formation-output dc-detail-reveal">
-        <div className="dc-console-bar"><i /><i /><i /><span>path-selector.config</span><b>ACTIVE</b></div>
+        <div className="dc-console-bar"><i /><i /><i /><span>seletor-trilha.config</span><b>ATIVA</b></div>
         <div className="dc-formation-output-body">
-          <span className="dc-terminal-label">SELECTED_PATH / {formation.index}</span>
+          <span className="dc-terminal-label">TRILHA_SELECIONADA / {formation.index}</span>
           <h3>{formation.title}</h3>
           <p>{formation.description}</p>
           <div className="dc-formation-meta">
             <span><small>DURAÇÃO</small><b>{formation.duration}</b></span>
-            <span><small>OUTPUT</small><b>{formation.outcome}</b></span>
+            <span><small>RESULTADO</small><b>{formation.outcome}</b></span>
           </div>
           <div className="dc-module-list">
             {formation.modules.map((module, index) => <span key={module}><i>{index + 1}</i>{module}<Check /></span>)}
@@ -219,7 +219,7 @@ function FormationSelector() {
 function PlatformConsole() {
   return (
     <div className="dc-platform-console dc-detail-reveal">
-      <div className="dc-console-bar"><i /><i /><i /><span>app.devclub.com.br/control-room</span><b>ONLINE</b></div>
+      <div className="dc-console-bar"><i /><i /><i /><span>app.devclub.com.br/central</span><b>NO AR</b></div>
       <div className="dc-platform-shell">
         <aside>
           <strong>&lt;/&gt;</strong>
@@ -228,29 +228,91 @@ function PlatformConsole() {
         </aside>
         <main>
           <div className="dc-platform-welcome">
-            <div><span>TRILHA FULL STACK</span><h3>Continue compilando,<br />João.</h3></div>
+            <div><span>TRILHA COMPLETA</span><h3>Continue compilando,<br />João.</h3></div>
             <div className="dc-ring-progress"><b>68</b><small>%</small></div>
           </div>
           <div className="dc-lesson-row">
             {[
               ["01", "Arquitetura de APIs", "18 min", true],
               ["02", "Autenticação segura", "24 min", false],
-              ["03", "Deploy & observabilidade", "31 min", false],
+              ["03", "Publicação e observabilidade", "31 min", false],
             ].map(([index, title, time, playing]) => (
               <article className={playing ? "is-playing" : ""} key={String(index)}>
-                <span>{index}</span><Play /><div><b>{title}</b><small>{time}</small></div>{playing ? <em>PLAYING</em> : <ArrowRight />}
+                <span>{index}</span><Play /><div><b>{title}</b><small>{time}</small></div>{playing ? <em>REPRODUZINDO</em> : <ArrowRight />}
               </article>
             ))}
           </div>
-          <div className="dc-agent-message"><Bot /><div><b>Club Agent</b><p>Revisei seu último PR. A arquitetura está boa; encontrei duas oportunidades de simplificação.</p></div><span>2</span></div>
+          <div className="dc-agent-message"><Bot /><div><b>Club Agent</b><p>Revisei seu último envio de código. A arquitetura está boa; encontrei duas oportunidades de simplificação.</p></div><span>2</span></div>
         </main>
         <section className="dc-platform-side">
           <span>HOJE / AO VIVO</span>
-          <div><i /><small>20:00</small><b>Review de portfólio</b><em>com Rodolfo Mori</em></div>
-          <span>SEU SPRINT</span>
-          <ul><li><Check />2 aulas concluídas</li><li><Check />1 PR enviado</li><li><i />Deploy pendente</li></ul>
+          <div><i /><small>20:00</small><b>Revisão de portfólio</b><em>com Rodolfo Mori</em></div>
+          <span>SEU CICLO</span>
+          <ul><li><Check />2 aulas concluídas</li><li><Check />1 envio de código</li><li><i />Publicação pendente</li></ul>
         </section>
       </div>
+    </div>
+  );
+}
+
+function ProjectLab() {
+  const [layout, setLayout] = useState<"grade" | "mosaico">("grade");
+
+  return (
+    <>
+      <div className="dc-project-toolbar dc-detail-reveal">
+        <span>VISUALIZAÇÃO DO PORTFÓLIO</span>
+        <div role="group" aria-label="Alterar visualização dos projetos">
+          <button
+            className={layout === "grade" ? "is-active" : ""}
+            onClick={() => setLayout("grade")}
+            aria-pressed={layout === "grade"}
+            data-project-layout="grade"
+          >
+            <LayoutGrid /> Grade
+          </button>
+          <button
+            className={layout === "mosaico" ? "is-active" : ""}
+            onClick={() => setLayout("mosaico")}
+            aria-pressed={layout === "mosaico"}
+            data-project-layout="mosaico"
+          >
+            <PanelsTopLeft /> Mosaico
+          </button>
+        </div>
+      </div>
+      <div className={`dc-project-lab is-${layout}`} data-project-grid={layout}>
+        {PROJECTS.map(({ Icon, path, title, stack, code }) => (
+          <article className="dc-project-case dc-detail-card" key={code}>
+            <header><span>{path}</span><b>{code}</b></header>
+            <Icon />
+            <div><small>{stack}</small><h3>{title}</h3><a href="#resultados">VER PROJETO <ArrowRight /></a></div>
+            <i />
+          </article>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function TutorPortrait({ initials, name }: { initials: string; name: string }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const hasPhoto = initials === "RM" && !imageFailed;
+
+  return (
+    <div className={hasPhoto ? "dc-tutor-portrait has-photo" : "dc-tutor-portrait"}>
+      {hasPhoto ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src="/tutors/rodolfo.jpg"
+          alt={name}
+          onError={() => setImageFailed(true)}
+          data-tutor-photo="rodolfo"
+        />
+      ) : (
+        <span>{initials}</span>
+      )}
+      <i />
     </div>
   );
 }
@@ -275,7 +337,7 @@ export default function DeepDiveSections() {
   return (
     <div className="dc-deep-dive">
       <header className="dc-deep-intro">
-        <span className="dc-deep-index">08.1 / EXPLORE DEEPER</span>
+        <span className="dc-deep-index" data-scramble>EXPLORE MAIS</span>
         <h2>A experiência termina.<br /><span>O sistema se abre.</span></h2>
         <p>Agora entre em cada camada que transforma estudo em código, código em portfólio e portfólio em oportunidade.</p>
         <div><i /><span>CONTINUE EXPLORANDO</span><ArrowDown /></div>
@@ -284,10 +346,10 @@ export default function DeepDiveSections() {
       <BrandRail />
 
       <section className="dc-detail-section dc-system-section" id="metodo">
-        <DetailHeading index="09" label="the system" title="Não é curso." outline="É um sistema." description="Conteúdo sozinho não transforma carreira. O que transforma é um ciclo que leva você da teoria ao mercado." />
+        <DetailHeading label="O sistema" title="Não é curso." outline="É um sistema." description="Conteúdo sozinho não transforma carreira. O que transforma é um ciclo que leva você da teoria ao mercado." />
         <div className="dc-system-grid">
           <div className="dc-system-code dc-detail-reveal">
-            <div className="dc-console-bar"><i /><i /><i /><span>career.compiler.ts</span><b>RUNNING</b></div>
+            <div className="dc-console-bar"><i /><i /><i /><span>carreira.compilador.ts</span><b>EXECUTANDO</b></div>
             <code>
               <span>01</span><p><b>const</b> carreira = <em>new</em> DevClub();</p>
               <span>02</span><p><b>while</b> (!voce.contratado) {"{"}</p>
@@ -297,7 +359,7 @@ export default function DeepDiveSections() {
               <span>06</span><p>{"}"}</p>
               <span>07</span><p><b>return</b> <strong>&quot;CONTRATADO&quot;</strong>;</p>
             </code>
-            <footer><Check /> build completed <span>12 months</span></footer>
+            <footer><Check /> compilação concluída <span>12 meses</span></footer>
           </div>
           <div className="dc-system-steps">
             {SYSTEM_STEPS.map(([index, title, text]) => (
@@ -308,12 +370,12 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section" id="formacoes-completas">
-        <DetailHeading index="10" label="path selector" title="Uma base." outline="Seis direções." description="Não escolha pela moda. Explore cada caminho, veja o output e encontre a formação que combina com o futuro que você quer construir." />
+        <DetailHeading label="Seletor de trilha" title="Uma base." outline="Seis direções." description="Não escolha pela moda. Explore cada caminho, veja o resultado e encontre a formação que combina com o futuro que você quer construir." />
         <FormationSelector />
       </section>
 
       <section className="dc-detail-section dc-ecosystem-section" id="ecossistema">
-        <DetailHeading index="11" label="support network" title="O código é seu." outline="A evolução é coletiva." description="Ao redor de cada aluno existe uma rede desenhada para remover bloqueios técnicos, profissionais e humanos." />
+        <DetailHeading label="Rede de apoio" title="O código é seu." outline="A evolução é coletiva." description="Ao redor de cada aluno existe uma rede desenhada para remover bloqueios técnicos, profissionais e humanos." />
         <div className="dc-ecosystem-grid">
           {ECOSYSTEM.map(({ Icon, tag, title, text, featured }) => (
             <article className={`dc-ecosystem-card dc-detail-card${featured ? " is-featured" : ""}`} key={title}>
@@ -325,31 +387,22 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section dc-platform-detail" id="plataforma-completa">
-        <DetailHeading index="12" label="control room" title="Tudo conectado." outline="Nada perdido." description="Uma plataforma que entende onde você está, o que vem agora e de quem você precisa para continuar." />
+        <DetailHeading label="Central de controle" title="Tudo conectado." outline="Nada perdido." description="Uma plataforma que entende onde você está, o que vem agora e de quem você precisa para continuar." />
         <PlatformConsole />
       </section>
 
       <section className="dc-detail-section" id="projetos-completos">
-        <DetailHeading index="13" label="proof of work" title="Menos certificado." outline="Mais evidência." description="Seis produtos que mostram como você pensa, constrói, resolve e entrega." />
-        <div className="dc-project-lab">
-          {PROJECTS.map(({ Icon, path, title, stack, code }) => (
-            <article className="dc-project-case dc-detail-card" key={code}>
-              <header><span>{path}</span><b>{code}</b></header>
-              <Icon />
-              <div><small>{stack}</small><h3>{title}</h3><a href="#resultados">VER OUTPUT <ArrowRight /></a></div>
-              <i />
-            </article>
-          ))}
-        </div>
+        <DetailHeading label="Prova de trabalho" title="Menos certificado." outline="Mais evidência." description="Seis produtos que mostram como você pensa, constrói, resolve e entrega." />
+        <ProjectLab />
       </section>
 
       <section className="dc-detail-section dc-results-section" id="resultados">
-        <DetailHeading index="14" label="human output" title="Não são números." outline="São novas versões." />
+        <DetailHeading label="Resultado humano" title="Não são números." outline="São novas versões." />
         <div className="dc-results-grid">
           <blockquote className="dc-feature-story dc-detail-reveal">
-            <span>CASE / 001</span>
-            <p>“Eu era auxiliar administrativo ganhando um salário mínimo. Em onze meses consegui minha primeira vaga como dev e dobrei minha renda.”</p>
-            <footer><b>VT</b><div><strong>Vicente Talento</strong><small>dev júnior · contratado em 2025</small></div><em>+100% RENDA</em></footer>
+            <span>HISTÓRIA / 001</span>
+            <p>“Eu era auxiliar administrativo ganhando um salário mínimo. Em onze meses consegui minha primeira vaga como programador e dobrei minha renda.”</p>
+            <footer><b>VT</b><div><strong>Vicente Talento</strong><small>programador júnior · contratado em 2025</small></div><em>+100% RENDA</em></footer>
           </blockquote>
           <div className="dc-story-stack">
             {TESTIMONIALS.map(([quote, name, role], index) => (
@@ -360,19 +413,19 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section" id="tutores-completos">
-        <DetailHeading index="15" label="human layer" title="Tecnologia acelera." outline="Pessoas direcionam." description="Aprenda com profissionais que constroem, revisam e contratam no mercado real." />
+        <DetailHeading label="Camada humana" title="Tecnologia acelera." outline="Pessoas direcionam." description="Aprenda com profissionais que constroem, revisam e contratam no mercado real." />
         <div className="dc-tutor-system">
-          {TUTORS.map(([initials, name, role, signal], index) => (
+          {TUTORS.map(([initials, name, role, signal]) => (
             <article className="dc-tutor-node dc-detail-card" key={initials}>
-              <div><span>{initials}</span><i /></div>
-              <small>NODE / 0{index + 1}</small><h3>{name}</h3><p>{role}</p><b>{signal}</b>
+              <TutorPortrait initials={initials} name={name} />
+              <small>NÚCLEO DO TIME</small><h3>{name}</h3><p>{role}</p><b>{signal}</b>
             </article>
           ))}
         </div>
       </section>
 
       <section className="dc-detail-section dc-market-section" id="mercado-completo">
-        <DetailHeading index="16" label="career telemetry" title="Aprender é input." outline="Carreira é output." description="O objetivo final não é acumular horas de vídeo. É aumentar sua capacidade de criar valor — e ser reconhecido por isso." />
+        <DetailHeading label="Telemetria de carreira" title="Aprender é entrada." outline="Carreira é resultado." description="O objetivo final não é acumular horas de vídeo. É aumentar sua capacidade de criar valor — e ser reconhecido por isso." />
         <div className="dc-market-console">
           <div className="dc-market-numbers dc-detail-reveal">
             <span><small>ALUNOS</small><b><i data-count="30412">0</i></b><em>↑ comunidade ativa</em></span>
@@ -380,7 +433,7 @@ export default function DeepDiveSections() {
             <span><small>RECOMENDAÇÃO</small><b><i data-count="97">0</i>%</b><em>↑ confiança</em></span>
           </div>
           <div className="dc-salary-chart dc-detail-reveal">
-            <header><span>REMUNERAÇÃO ANUAL / BRASIL × REMOTO</span><b>LIVE DATA</b></header>
+            <header><span>REMUNERAÇÃO ANUAL / BRASIL × REMOTO</span><b>DADOS AO VIVO</b></header>
             {[
               ["JÚNIOR", "34%", "52%", "R$ 70,8K", "R$ 135K"],
               ["PLENO", "55%", "72%", "R$ 140K", "R$ 201K"],
@@ -394,13 +447,13 @@ export default function DeepDiveSections() {
       </section>
 
       <section className="dc-detail-section dc-faq-section" id="faq">
-        <DetailHeading index="17" label="open questions" title="Sem mistério." outline="Sem letra miúda." />
+        <DetailHeading label="Perguntas abertas" title="Sem mistério." outline="Sem letra miúda." />
         <FAQSection />
       </section>
 
       <section className="dc-new-final" id="cta">
         <div className="dc-final-orbit" aria-hidden="true"><i /><i /><i /></div>
-        <span>18 / READY TO COMPILE</span>
+        <span data-scramble>PRONTO PARA COMPILAR</span>
         <h2>Sua próxima versão<br /><b>começa agora.</b></h2>
         <p>Entre para o DevClub e transforme estudo em código, código em portfólio e portfólio em oportunidade.</p>
         <a href="#formacoes-completas">Escolher minha formação <ArrowRight /></a>

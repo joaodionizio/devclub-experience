@@ -114,7 +114,7 @@ export default function ParticleBoot({ onDone }: ParticleBootProps) {
   return (
     <div className="dc-boot" ref={rootRef}>
       <canvas className="dc-boot-canvas" ref={canvasRef} aria-hidden="true" />
-      <small className="dc-boot-label">INITIALIZING EXPERIENCE</small>
+      <small className="dc-boot-label">INICIALIZANDO EXPERIÊNCIA</small>
     </div>
   );
 }

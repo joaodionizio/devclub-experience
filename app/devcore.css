@@ -309,7 +309,7 @@ body:has(.dc-boot){overflow:hidden}
 .dc-scene--hero{align-items:flex-end;padding-bottom:9vh}
 .dc-scene--hero .dc-copy{width:min(72vw,950px)}
 .dc-kicker{display:flex;align-items:center;gap:12px;margin-bottom:22px;font:9px var(--mono);letter-spacing:.2em;text-transform:uppercase}
-.dc-kicker span{color:#67e8f9}.dc-kicker i{width:36px;height:1px;background:rgba(255,255,255,.2)}.dc-kicker b{color:#737d91;font-weight:400}
+.dc-kicker i{width:36px;height:1px;background:rgba(255,255,255,.2)}.dc-kicker b{color:#737d91;font-weight:400}
 .dc-scene h1,.dc-scene h2{font-weight:800;text-transform:uppercase;letter-spacing:-.055em;text-wrap:balance}
 .dc-scene h1{font-size:clamp(48px,7.3vw,112px);line-height:.82}
 .dc-scene h2{font-size:clamp(43px,5.7vw,82px);line-height:.9}
