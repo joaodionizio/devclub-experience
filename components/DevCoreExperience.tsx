@@ -5,17 +5,13 @@ import {
   ArrowDown,
   ArrowRight,
   Bot,
-  Braces,
   Check,
   Code2,
-  Database,
-  GitBranch,
   Layers3,
   Menu,
   MessageSquareCode,
   Network,
   Play,
-  Rocket,
   Sparkles,
   Terminal,
   Users,
@@ -33,7 +29,7 @@ import ScrambleEyebrows from "@/components/ScrambleEyebrows";
 gsap.registerPlugin(ScrollTrigger);
 
 const SCENES = [
-  { id: "inicio", nav: "INITIALIZE", particle: "</>" },
+  { id: "inicio", particle: "</>" },
   { id: "quem-somos", nav: "MANIFEST", particle: "DEV" },
   { id: "formacoes", nav: "BUILD YOUR STACK", particle: "STACK" },
   { id: "jornada", nav: "CAREER PIPELINE", particle: "01→05" },
@@ -81,6 +77,9 @@ function SceneLabel({ label }: { label: string }) {
 }
 
 function CoreArtifact({ active }: { active: number }) {
+  const activeScene = SCENES[active];
+  const activeNav = "nav" in activeScene ? activeScene.nav : null;
+
   return (
     <div className={`dc-artifact dc-artifact--${active}`} aria-hidden="true">
       <div className="dc-core-aura" />
@@ -92,7 +91,7 @@ function CoreArtifact({ active }: { active: number }) {
       </div>
       <div className="dc-core-center">
         <span>&lt;/&gt;</span>
-        <small>{SCENES[active].nav}</small>
+        {activeNav && <small>{activeNav}</small>}
       </div>
 
       <div className="dc-artifact-panel dc-artifact-manifest">
@@ -222,6 +221,7 @@ export default function DevCoreExperience() {
   useEffect(() => {
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const canvas = canvasRef.current!;
+    const experienceElement = experienceRef.current;
     const engine = new ParticleEngine(canvas, {
       fontFamily: displayFontFamily(),
       reduced,
@@ -334,7 +334,7 @@ export default function DevCoreExperience() {
       });
 
       ScrollTrigger.create({
-        trigger: experienceRef.current,
+        trigger: experienceElement,
         start: "top top",
         end: "bottom bottom",
         onUpdate: (self) => {
@@ -370,7 +370,7 @@ export default function DevCoreExperience() {
     addEventListener("pointerleave", onLeave);
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", onResize);
-    experienceRef.current?.addEventListener("click", onClick);
+    experienceElement?.addEventListener("click", onClick);
 
     return () => {
       engine.stop();
@@ -381,7 +381,7 @@ export default function DevCoreExperience() {
       removeEventListener("pointerleave", onLeave);
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onResize);
-      experienceRef.current?.removeEventListener("click", onClick);
+      experienceElement?.removeEventListener("click", onClick);
     };
   }, []);
 
@@ -408,7 +408,6 @@ export default function DevCoreExperience() {
       <div className="dc-track">
         <section className="dc-scene dc-scene--hero" id="inicio" data-scene="0">
           <div className="dc-copy">
-            <SceneLabel label="INITIALIZE" />
             <h1 className="dc-reveal">
               Seu futuro<br />
               <span>não vem pronto.</span>
