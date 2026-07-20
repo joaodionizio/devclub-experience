@@ -58,6 +58,12 @@ body{overflow-x:hidden;background:#05070b}
   background:radial-gradient(70% 50% at 50% 45%,rgba(74,125,255,.1),transparent 70%),#05070b;
 }
 .dc-boot-canvas{position:absolute;inset:0;display:block}
+.dc-boot-label{
+  position:absolute;left:50%;bottom:12vh;transform:translateX(-50%);
+  font:10px var(--mono);letter-spacing:.25em;color:#8b93a7;white-space:nowrap;
+  animation:dc-boot-pulse 1.8s ease-in-out infinite;
+}
+@keyframes dc-boot-pulse{50%{opacity:.35}}
 /* enquanto o boot roda, o site fica travado atrás dele */
 body:has(.dc-boot){overflow:hidden}
 
@@ -155,6 +161,7 @@ body:has(.dc-boot){overflow:hidden}
   transition:transform .9s,opacity .7s;
 }
 .dc-core-center span{font:800 24px var(--mono);color:#dbeafe;text-shadow:0 0 18px #4a7dff}
+.dc-core-center small{margin-top:7px;color:#67e8f9;font:8px var(--mono);letter-spacing:.18em;text-transform:uppercase}
 
 .dc-artifact-panel{
   position:absolute;left:50%;top:50%;opacity:0;visibility:hidden;transform:translate(-50%,-46%) scale(.82);
@@ -301,6 +308,8 @@ body:has(.dc-boot){overflow:hidden}
 .dc-scene--right .dc-copy{margin-left:auto}
 .dc-scene--hero{align-items:flex-end;padding-bottom:9vh}
 .dc-scene--hero .dc-copy{width:min(72vw,950px)}
+.dc-kicker{display:flex;align-items:center;gap:12px;margin-bottom:22px;font:9px var(--mono);letter-spacing:.2em;text-transform:uppercase}
+.dc-kicker i{width:36px;height:1px;background:rgba(255,255,255,.2)}.dc-kicker b{color:#737d91;font-weight:400}
 .dc-scene h1,.dc-scene h2{font-weight:800;text-transform:uppercase;letter-spacing:-.055em;text-wrap:balance}
 .dc-scene h1{font-size:clamp(48px,7.3vw,112px);line-height:.82}
 .dc-scene h2{font-size:clamp(43px,5.7vw,82px);line-height:.9}
@@ -400,8 +409,9 @@ body:has(.dc-boot){overflow:hidden}
     0 0 0 90px rgba(74,125,255,.018),
     0 0 0 180px rgba(74,125,255,.012);
 }
+.dc-deep-index{position:relative;color:#67e8f9;font:9px var(--mono);letter-spacing:.24em}
 .dc-deep-intro h2{
-  position:relative;margin-top:0;font-size:clamp(42px,6.4vw,88px);line-height:.92;text-transform:uppercase;
+  position:relative;margin-top:25px;font-size:clamp(42px,6.4vw,88px);line-height:.92;text-transform:uppercase;
   letter-spacing:-.055em;max-width:15ch;
 }
 .dc-deep-intro h2 span{

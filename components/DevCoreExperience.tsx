@@ -28,18 +28,19 @@ import { ParticleEngine } from "@/lib/particle-engine";
 import { displayFontFamily } from "@/lib/fonts";
 import ParticleBoot from "@/components/ParticleBoot";
 import DeepDiveSections from "@/components/DeepDiveSections";
+import ScrambleEyebrows from "@/components/ScrambleEyebrows";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SCENES = [
-  { id: "inicio", particle: "</>" },
-  { id: "quem-somos", particle: "DEV" },
-  { id: "formacoes", particle: "TRILHA" },
-  { id: "jornada", particle: "01→05" },
-  { id: "plataforma", particle: "AO VIVO" },
-  { id: "alunos", particle: "PROJETO" },
-  { id: "mercado", particle: "VAGA" },
-  { id: "tutores", particle: "CLUBE" },
+  { id: "inicio", nav: "INITIALIZE", particle: "</>" },
+  { id: "quem-somos", nav: "MANIFEST", particle: "DEV" },
+  { id: "formacoes", nav: "BUILD YOUR STACK", particle: "TRILHA" },
+  { id: "jornada", nav: "CAREER PIPELINE", particle: "01→05" },
+  { id: "plataforma", nav: "NEVER CODE ALONE", particle: "AO VIVO" },
+  { id: "alunos", nav: "PROOF OF WORK", particle: "PROJETO" },
+  { id: "mercado", nav: "CONNECTED TO THE MARKET", particle: "VAGA" },
+  { id: "tutores", nav: "JOIN THE CLUB", particle: "CLUBE" },
 ] as const;
 
 const FORMATIONS = [
@@ -70,6 +71,15 @@ const TUTORS = [
   ["JU", "Juliana", "dados · Power BI"],
 ];
 
+function SceneLabel({ label }: { label: string }) {
+  return (
+    <div className="dc-kicker dc-reveal">
+      <i />
+      <b data-scramble>{label}</b>
+    </div>
+  );
+}
+
 function CoreArtifact({ active }: { active: number }) {
   return (
     <div className={`dc-artifact dc-artifact--${active}`} aria-hidden="true">
@@ -82,10 +92,11 @@ function CoreArtifact({ active }: { active: number }) {
       </div>
       <div className="dc-core-center">
         <span>&lt;/&gt;</span>
+        <small>{SCENES[active].nav}</small>
       </div>
 
       <div className="dc-artifact-panel dc-artifact-manifest">
-        <div className="dc-panel-bar"><i /><i /><i /><span>futuro.ts</span></div>
+        <div className="dc-panel-bar"><i /><i /><i /><span>manifest.ts</span></div>
         <code>
           <b>const</b> futuro = <em>await</em> voce
           <br />&nbsp;&nbsp;.<span>estudar</span>()
@@ -382,6 +393,7 @@ export default function DevCoreExperience() {
   return (
     <main className={`dc-experience${loaded ? " is-loaded" : ""}`} ref={experienceRef}>
       {!booted && <ParticleBoot onDone={() => setBooted(true)} />}
+      {booted && <ScrambleEyebrows />}
 
       <div className="dc-progress" />
       <div className="dc-grid" aria-hidden="true" />
@@ -396,6 +408,7 @@ export default function DevCoreExperience() {
       <div className="dc-track">
         <section className="dc-scene dc-scene--hero" id="inicio" data-scene="0">
           <div className="dc-copy">
+            <SceneLabel label="INITIALIZE" />
             <h1 className="dc-reveal">
               Seu futuro<br />
               <span>não vem pronto.</span>
@@ -422,6 +435,7 @@ export default function DevCoreExperience() {
 
         <section className="dc-scene dc-scene--right" id="quem-somos" data-scene="1">
           <div className="dc-copy">
+            <SceneLabel label="MANIFEST" />
             <h2 className="dc-reveal">Não somos<br /><span>mais um curso.</span></h2>
             <div className="dc-manifest dc-reveal">
               <p>Tutorial não te contrata.</p>
@@ -434,6 +448,7 @@ export default function DevCoreExperience() {
 
         <section className="dc-scene" id="formacoes" data-scene="2">
           <div className="dc-copy">
+            <SceneLabel label="BUILD YOUR STACK" />
             <h2 className="dc-reveal">Uma base.<br /><span>Muitos caminhos.</span></h2>
             <p className="dc-lead dc-reveal">Escolha sua trilha. O núcleo é o mesmo: aprender construindo o que o mercado usa.</p>
             <div className="dc-formations dc-reveal">
@@ -448,6 +463,7 @@ export default function DevCoreExperience() {
 
         <section className="dc-scene dc-scene--right" id="jornada" data-scene="3">
           <div className="dc-copy">
+            <SceneLabel label="CAREER PIPELINE" />
             <h2 className="dc-reveal">12 meses.<br /><span>Uma evolução contínua.</span></h2>
             <div className="dc-journey-list dc-reveal">
               {JOURNEY.map(([time, title], index) => (
@@ -463,6 +479,7 @@ export default function DevCoreExperience() {
 
         <section className="dc-scene" id="plataforma" data-scene="4">
           <div className="dc-copy">
+            <SceneLabel label="NEVER CODE ALONE" />
             <h2 className="dc-reveal">Você nunca<br /><span>programa sozinho.</span></h2>
             <p className="dc-lead dc-reveal">Uma estrutura inteira permanece ao seu lado quando o código trava — e quando a carreira precisa avançar.</p>
             <div className="dc-support-grid dc-reveal">
@@ -476,6 +493,7 @@ export default function DevCoreExperience() {
 
         <section className="dc-scene dc-scene--right" id="alunos" data-scene="5">
           <div className="dc-copy">
+            <SceneLabel label="PROOF OF WORK" />
             <h2 className="dc-reveal">Seu código<br /><span>vira prova.</span></h2>
             <p className="dc-lead dc-reveal">Você não termina com um certificado na gaveta. Termina com projetos que um recrutador pode abrir, testar e avaliar.</p>
             <blockquote className="dc-testimonial dc-reveal">
@@ -488,6 +506,7 @@ export default function DevCoreExperience() {
 
         <section className="dc-scene" id="mercado" data-scene="6">
           <div className="dc-copy">
+            <SceneLabel label="CONNECTED TO THE MARKET" />
             <h2 className="dc-reveal">O mercado<br /><span>reconhece.</span></h2>
             <div className="dc-metrics dc-reveal">
               <div><b>30.412</b><span>alunos</span></div>
@@ -503,6 +522,7 @@ export default function DevCoreExperience() {
 
         <section className="dc-scene dc-scene--right dc-scene--final" id="tutores" data-scene="7">
           <div className="dc-copy">
+            <SceneLabel label="JOIN THE CLUB" />
             <h2 className="dc-reveal">Aprenda com quem<br /><span>constrói o mercado.</span></h2>
             <div className="dc-tutor-list dc-reveal">
               {TUTORS.slice(0, 4).map(([initials, name, role]) => (

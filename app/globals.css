@@ -491,6 +491,9 @@ footer{border-top:1px solid var(--line);background:var(--bg-2);overflow:hidden;p
   .hint{display:none}
 }
 
+/* caracteres temporários do efeito de decodificação */
+.scramble-char{color:var(--cyan);opacity:.75}
+
 /* =========================================================
    PLAYGROUND — mini console de expressões (ver Playground.tsx)
 ========================================================= */
