@@ -175,7 +175,9 @@ function BrandRail() {
       </div>
       <div className="dc-company-rail">
         <span>ALUNOS TRABALHANDO EM</span>
-        <div>{[...companies, ...companies].map((company, index) => <b key={`${company}-${index}`}>{company}<i /></b>)}</div>
+        <div className="dc-company-marquee">
+          <div>{[...companies, ...companies].map((company, index) => <b key={`${company}-${index}`}>{company}<i /></b>)}</div>
+        </div>
       </div>
     </section>
   );
