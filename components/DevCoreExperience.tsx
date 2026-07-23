@@ -228,6 +228,8 @@ export default function DevCoreExperience() {
   const [booted, setBooted] = useState(false);
 
   useEffect(() => {
+    if (!booted) return;
+
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const canvas = canvasRef.current!;
     const experienceElement = experienceRef.current;
@@ -239,6 +241,7 @@ export default function DevCoreExperience() {
     let lenis: Lenis | null = null;
     let lenisRaf = 0;
     let initialHashRaf = 0;
+    let resizeRaf = 0;
     let gatherTween: gsap.core.Tween | null = null;
     let cancelled = false;
 
@@ -401,8 +404,15 @@ export default function DevCoreExperience() {
       engine.nextTheme();
     };
     const onResize = () => {
-      engine.resize();
-      ScrollTrigger.refresh();
+      cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => {
+        engine.resize();
+        ScrollTrigger.refresh();
+      });
+    };
+    const onVisibilityChange = () => {
+      if (document.hidden) engine.stop();
+      else engine.start();
     };
     const onAnchorClick = (event: MouseEvent) => {
       const origin = event.target;
@@ -428,6 +438,7 @@ export default function DevCoreExperience() {
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", onResize);
     addEventListener("popstate", onPopState);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     experienceElement?.addEventListener("click", onClick);
     experienceElement?.addEventListener("click", onAnchorClick);
 
@@ -438,20 +449,29 @@ export default function DevCoreExperience() {
       lenis?.destroy();
       cancelAnimationFrame(lenisRaf);
       cancelAnimationFrame(initialHashRaf);
+      cancelAnimationFrame(resizeRaf);
       ctx.revert();
       removeEventListener("pointermove", onMove);
       removeEventListener("pointerleave", onLeave);
       removeEventListener("scroll", onScroll);
       removeEventListener("resize", onResize);
       removeEventListener("popstate", onPopState);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       experienceElement?.removeEventListener("click", onClick);
       experienceElement?.removeEventListener("click", onAnchorClick);
     };
-  }, []);
+  }, [booted]);
 
   useEffect(() => {
     document.body.classList.toggle("dc-menu-open", menuOpen);
-    return () => document.body.classList.remove("dc-menu-open");
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.classList.remove("dc-menu-open");
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, [menuOpen]);
 
   return (
@@ -496,6 +516,7 @@ export default function DevCoreExperience() {
               <div><span>AL</span><span>JP</span><span>MR</span><span>+</span></div>
               <p><b>30.412 pessoas</b> já iniciaram essa transformação</p>
             </div>
+            <small className="dc-concept-note dc-reveal">Dados e perfis apresentados como conteúdo conceitual desta experiência.</small>
           </div>
           <a className="dc-scroll-cue" href="#quem-somos"><span>Role para compilar</span><ArrowDown /></a>
         </section>

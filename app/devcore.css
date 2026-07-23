@@ -337,6 +337,7 @@ body:has(.dc-boot){overflow:hidden}
   background:linear-gradient(135deg,#102650,#147e99);font:700 8px var(--mono)
 }.dc-proof>div span:first-child{margin-left:0}
 .dc-proof p{color:#7f899d;font-size:11px}.dc-proof p b{color:#dbeafe}
+.dc-concept-note{display:block;max-width:52ch;margin-top:12px;color:#59657a;font:7px/1.55 var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .dc-scroll-cue{
   position:absolute;right:clamp(24px,5vw,75px);bottom:8vh;display:flex;align-items:center;gap:12px;
   color:#687287;font:9px var(--mono);letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl;

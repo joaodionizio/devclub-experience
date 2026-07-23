@@ -88,6 +88,7 @@ export class ParticleEngine {
   private themeIdx = 0;
   private currentText = "</>";
   private raf = 0;
+  private running = false;
   private mouse = { x: -9e9, y: -9e9, vx: 0, vy: 0, px: -9e9, py: -9e9 };
   /** força de montagem — animada de fora (0 = nuvem solta) */
   gather = 0.0005;
@@ -236,19 +237,25 @@ export class ParticleEngine {
   }
 
   start() {
+    if (this.running) return;
     if (this.opts.reduced) {
       this.gather = 1;
       for (const p of this.pts) { p.x = p.tx; p.y = p.ty; }
       this.drawStatic();
       return;
     }
+    this.running = true;
     const tick = () => {
+      if (!this.running) return;
       this.step();
       this.raf = requestAnimationFrame(tick);
     };
     tick();
   }
-  stop() { cancelAnimationFrame(this.raf); }
+  stop() {
+    this.running = false;
+    cancelAnimationFrame(this.raf);
+  }
 
   private drawStatic() {
     const { ctx } = this;

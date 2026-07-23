@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -183,6 +184,12 @@ function BrandRail() {
 function FormationSelector() {
   const [active, setActive] = useState(0);
   const formation = FORMATIONS[active];
+  const selectTab = (index: number) => {
+    const nextIndex = (index + FORMATIONS.length) % FORMATIONS.length;
+    setActive(nextIndex);
+    document.getElementById(`formation-tab-${nextIndex}`)?.focus();
+  };
+
   return (
     <div className="dc-formation-console">
       <div className="dc-formation-list dc-detail-reveal" role="tablist" aria-label="Formações">
@@ -192,14 +199,38 @@ function FormationSelector() {
             key={item.index}
             className={active === index ? "is-active" : ""}
             onClick={() => setActive(index)}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+                event.preventDefault();
+                selectTab(index + 1);
+              } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+                event.preventDefault();
+                selectTab(index - 1);
+              } else if (event.key === "Home") {
+                event.preventDefault();
+                selectTab(0);
+              } else if (event.key === "End") {
+                event.preventDefault();
+                selectTab(FORMATIONS.length - 1);
+              }
+            }}
             role="tab"
+            id={`formation-tab-${index}`}
+            aria-controls="formation-panel"
             aria-selected={active === index}
+            tabIndex={active === index ? 0 : -1}
           >
             <span>{item.index}</span><b>{item.title}</b><ArrowRight />
           </button>
         ))}
       </div>
-      <article className="dc-formation-output dc-detail-reveal">
+      <article
+        className="dc-formation-output dc-detail-reveal"
+        id="formation-panel"
+        role="tabpanel"
+        aria-labelledby={`formation-tab-${active}`}
+        tabIndex={0}
+      >
         <div className="dc-console-bar"><i /><i /><i /><span>path-selector.config</span><b>ACTIVE</b></div>
         <div className="dc-formation-output-body">
           <span className="dc-terminal-label">SELECTED_PATH / {formation.index}</span>
@@ -387,10 +418,12 @@ function TutorPortrait({ initials, name }: { initials: string; name: string }) {
   return (
     <div className={hasPhoto ? "dc-tutor-portrait has-photo" : "dc-tutor-portrait"}>
       {hasPhoto ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src="/tutors/rodolfo.jpg"
           alt={name}
+          width={966}
+          height={966}
+          sizes="(max-width: 700px) 45vw, (max-width: 1000px) 30vw, 16vw"
           onError={() => setImageFailed(true)}
           data-tutor-photo="rodolfo"
         />
@@ -416,7 +449,7 @@ function FAQSection() {
           >
             <span>{String(index + 1).padStart(2, "0")}</span><b>{question}</b><ChevronDown />
           </button>
-          <div id={`faq-answer-${index}`}><p>{answer}</p></div>
+          <div id={`faq-answer-${index}`} aria-hidden={open !== index}><p>{answer}</p></div>
         </article>
       ))}
     </div>

@@ -1,59 +1,112 @@
 # DevClub — DEV CORE Experience
 
-Página institucional criada para o concurso da vaga de Programador(a) Full Stack.
-**Demo:** _adicione aqui o link da Vercel após o deploy_
+Landing page institucional interativa criada para o concurso de uma vaga Full Stack do DevClub.
 
-## Conceito
+- **Deploy:** [adicione aqui o link do deploy]
+- **Repositório:** [github.com/joaodionizio/devclub-experience](https://github.com/joaodionizio/devclub-experience)
+- **Autor:** João Luís Dionízio dos Santos
 
-“Seu futuro não vem pronto. Você compila.”
+## Conceito DEV CORE
 
-A página é uma narrativa contínua em oito atos. Um núcleo digital fixo acompanha
-o visitante e muda de estado conforme o scroll: `</>` → manifesto → stack →
-jornada → plataforma → projetos → mercado → comunidade. Depois da narrativa,
-o **Deep System** abre cada promessa em uma interface detalhada e interativa.
+> Seu futuro não vem pronto. Você compila.
 
-## Destaques
+DEV CORE transforma a navegação em uma narrativa contínua. Um núcleo digital acompanha oito cenas e muda de estado conforme o scroll: código, manifesto, stack, jornada, plataforma, projetos, mercado e comunidade. Depois dessa abertura, o **Deep System** detalha cada camada em interfaces interativas.
 
-- **DEV CORE tipográfico:** até 12 mil partículas renderizadas em Canvas 2D
-  morfam entre os estados da história.
-- **Narrativa scroll-driven:** GSAP ScrollTrigger sincroniza conteúdo, partículas,
-  HUD, progresso e artefatos visuais.
-- **Artefatos code-native:** terminal, órbitas, pipeline, plataforma, projetos e
-  rede de empresas são construídos com HTML/CSS, sem imagens pesadas.
-- **Deep System reformulado:** seletor de formações, control room, laboratório
-  de projetos, rede de tutores, telemetria de carreira e FAQ usam a mesma
-  linguagem visual do DEV CORE.
-- **Interação física:** o ponteiro cria vento nas partículas e o clique gera uma
-  explosão radial.
-- **Experiência adaptativa:** no mobile, a composição abandona o palco fixo e
-  vira uma leitura vertical; `prefers-reduced-motion` recebe uma versão estática.
+## Stack
 
-## Stack e decisões
+- Next.js 14 com App Router, React 18 e TypeScript;
+- CSS customizado com Tailwind CSS disponível na pipeline;
+- GSAP e ScrollTrigger para narrativa e transições;
+- Lenis para rolagem suave;
+- Canvas 2D para o motor tipográfico de partículas;
+- Lucide React para ícones;
+- `next/font` para Inter, Inter Tight e JetBrains Mono.
 
-| Escolha | Por quê |
-| --- | --- |
-| **Next.js 14 (App Router)** | SSG da página inteira (rota `/` 100% estática), estrutura de componentes clara e deploy trivial na Vercel |
-| **TypeScript** | Segurança nos contratos do motor de partículas e dos componentes |
-| **Canvas 2D (sem WebGL/lib)** | 12k grãos de 1–2px a 60fps com `fillRect`; controle total da física e zero dependência 3D |
-| **GSAP + ScrollTrigger** | Controla as oito cenas, reveals e o progresso global |
-| **Tailwind + CSS custom** | Tailwind para utilitários; o design system (tokens, glows, animações) vive em `globals.css` |
-| **`next/font`** | Fontes self-hosted sem FOUT; o motor lê a família real via CSS variable (`lib/fonts.ts`) |
+## Principais interações
 
-## Rodando
+- boot tipográfico e morfologia de até 12 mil partículas;
+- oito cenas sincronizadas ao scroll;
+- vento por ponteiro, explosão por clique e troca de paleta;
+- seletor acessível de formações;
+- alternância de layout no laboratório de projetos;
+- FAQ expansível e navegação interna com rolagem suave;
+- animações de entrada, contadores e microinterações em cards.
 
-```bash
-npm install
-npm run dev    # http://localhost:3000
-npm run build  # build de produção (estático)
-```
+## Decisões técnicas
+
+- A rota principal permanece estática; a camada cliente é usada apenas onde Canvas, eventos e animações exigem APIs do navegador.
+- Canvas 2D com `fillRect` evita uma dependência 3D e mantém controle direto sobre física e desenho.
+- A resolução do Canvas fica em DPR 1: partículas de 1–2 px não justificam quadruplicar o custo em telas de DPR 2.
+- `gsap.context()` delimita animações e ScrollTriggers, permitindo limpeza com `revert()`.
+- O motor principal só inicia depois do boot e pausa quando a aba fica oculta.
+- A foto local usa `next/image`; os demais artefatos visuais são HTML e CSS.
+
+## Acessibilidade e responsividade
+
+- documento em `pt-BR`, hierarquia de headings e landmarks semânticos;
+- links, botões, menu e FAQ operáveis por teclado;
+- tabs com setas, Home e End, estados ARIA e painel associado;
+- foco visível e fechamento do menu por `Escape`;
+- alternativa estática para `prefers-reduced-motion`;
+- composição vertical adaptada para telas menores e ponteiro fino opcional.
+
+## Performance
+
+- geração estática da rota `/`;
+- animações concentradas em transformações e opacidade;
+- Canvas limitado a 12 mil partículas e DPR 1;
+- `requestAnimationFrame`, listeners, Lenis, timelines e ScrollTriggers são limpos no unmount;
+- resize do Canvas é agrupado por frame e animação é suspensa em abas ocultas;
+- fontes são gerenciadas por `next/font` e a imagem fotográfica por `next/image`.
+
+Nenhum resultado de Lighthouse, cobertura ou FPS é declarado porque essas métricas não foram registradas de forma controlada neste repositório.
 
 ## Estrutura
 
-```
-app/            layout · composição · design system global · estilos DEV CORE
-components/     DevCoreExperience.tsx (narrativa) · DeepDiveSections.tsx (sistema detalhado)
-lib/            particle-engine.ts (física) · fonts.ts (família real p/ canvas)
+```text
+app/          layout, metadados, favicon e estilos globais/DEV CORE
+components/   narrativa, boot, seções detalhadas e text scramble
+lib/          motor de partículas, fonte resolvida e efeito de texto
+public/       assets estáticos
 ```
 
+## Como executar
+
+Use Node.js 20 LTS e npm. O Next.js 14 aceita versões anteriores compatíveis, mas Node 20 é a recomendação para reproduzir o ambiente com uma versão LTS mantida.
+
+```bash
+npm install
+npm run dev
+```
+
+Acesse `http://localhost:3000`.
+
+## Qualidade e build
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run start
+```
+
+## Uso de IA
+
+IA generativa foi usada como apoio no processo de concepção, revisão e desenvolvimento. As decisões de arquitetura, integração, validação e acabamento permanecem responsabilidade do autor. O código deve ser avaliado pelo comportamento e pelas decisões registradas no próprio repositório, não pela ferramenta usada como assistência.
+
+## Nota sobre conteúdo
+
+Esta é uma peça conceitual para um processo seletivo, não um canal oficial do DevClub. Métricas, salários, cronogramas, depoimentos, perfis, garantias e outros conteúdos demonstrativos podem ser ilustrativos e precisam de validação pelo DevClub antes de qualquer publicação institucional.
+
+## Melhorias futuras
+
+- validar todo o conteúdo institucional com fontes oficiais;
+- medir Lighthouse, Web Vitals, FPS e consumo em dispositivos reais;
+- adicionar testes de acessibilidade e regressão visual;
+- extrair dados e subcomponentes dos dois arquivos de composição maiores;
+- criar uma imagem Open Graph própria e configurar a URL final do deploy;
+- avaliar pausa por interseção quando o Canvas estiver totalmente fora da área visível.
+
 ---
-Feito com `</>` e café.
+
+Feito com `</>` e café por **João Luís Dionízio dos Santos**.
